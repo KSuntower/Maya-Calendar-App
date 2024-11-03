@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Maya Calendar App</string>
+    <string name="screen_one_title">Convert to Maya Calendar</string>
+    <string name="day_input_label">Day</string>
+    <string name="month_input_label">Month</string>
+    <string name="year_input_label">Year</string>
+    <string name="long_count_label">Long Count</string>
+    <string name="calendar_round_label">Calendar Round</string>
+    <string name="lord_of_night_label">Lord of the Night</string>
+    <string name="year_bearer_label">Year Bearer</string>
+    <string name="color_and_direction">Color and Direction</string>
+    <string name="submit_button">Submit</string>
+    <string-array name="month_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+</resources>
