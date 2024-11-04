@@ -1,13 +1,9 @@
 package com.example.mayacalendarapp
 
 import android.app.Activity
-import android.appwidget.AppWidgetProvider
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -20,6 +16,12 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.mayacalendarapp.providers.DataStoreProvider
+
+
+private const val USER_PREFERENCES_NAME = "app_settings"
+private val Context.dataStore  by preferencesDataStore(name = USER_PREFERENCES_NAME)
 
 class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
@@ -31,6 +33,7 @@ class SpinnerActivity : Activity(), AdapterView.OnItemSelectedListener {
 }
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var submitButton : Button
 
     // We put this in a list to make it easier to instantiate each element.
@@ -62,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        DataStoreProvider(dataStore = dataStore, this)
         tzolkin.calculate()
 
         val monthInput : Spinner = findViewById(R.id.Spinner)
