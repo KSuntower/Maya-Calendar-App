@@ -10,6 +10,8 @@
     <string name="year_bearer_label">Year Bearer</string>
     <string name="color_and_direction">Color and Direction</string>
     <string name="submit_button">Submit</string>
+    <string name="message_of_the_day">Today is,</string>
+    <string name="placeholder">Placeholder</string>
     <string-array name="month_array">
         <item>January</item>
         <item>February</item>

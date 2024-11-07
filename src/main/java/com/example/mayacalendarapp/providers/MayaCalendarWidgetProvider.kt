@@ -6,9 +6,12 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import androidx.datastore.dataStore
 import com.example.mayacalendarapp.MainActivity
 import com.example.mayacalendarapp.R
-import com.example.mayacalendarapp.Tzolkin
+import com.example.mayacalendarapp.data.Tzolkin
+import com.example.mayacalendarapp.dataStore
+
 
 class MayaCalendarWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(
@@ -17,30 +20,28 @@ class MayaCalendarWidgetProvider : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         appWidgetIds.forEach { appWidgetId ->
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            updateCalendarWidget(context, appWidgetManager, appWidgetId)
         }
     }
-}
+    private fun updateCalendarWidget(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId : Int
+    ) {
+        lateinit var dataStoreRepository : CalendarDataRepository
+        val tzolkin : Tzolkin = Tzolkin()
+        val longCountText = tzolkin.getLongCount()
+        val calendarDay = tzolkin.getCalendarDay()
+        val calendarMonth = tzolkin.getCalendarMonth()
 
-internal fun updateAppWidget(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetId : Int
-) {
-    val tzolkin = Tzolkin.getInstance()
-    tzolkin.calculate()
-
-    val longCountText = tzolkin.getLongCount()
-    val calendarDay = tzolkin.getCalendarDay()
-    val calendarMonth = tzolkin.getCalendarMonth()
-
-    val views : RemoteViews = RemoteViews(
-        context.packageName,
-        R.layout.calendar_widget
-    ).apply {
-        setTextViewText(R.id.LongCountWidget, longCountText)
-        setTextViewText(R.id.CalendarDay, calendarDay)
-        setTextViewText(R.id.CalendarMonth, calendarMonth)
+        val views: RemoteViews = RemoteViews(
+            context.packageName,
+            R.layout.calendar_widget
+        ).apply {
+            setTextViewText(R.id.LongCountWidget, longCountText)
+            setTextViewText(R.id.CalendarDay, calendarDay)
+            setTextViewText(R.id.CalendarMonth, calendarMonth)
+        }
+        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
-    appWidgetManager.updateAppWidget(appWidgetId, views)
 }
