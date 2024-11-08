@@ -34,20 +34,22 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
             return
         }
 
+        val daysPassedSinceUpdate : Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - preferences.daySaved
+        if (daysPassedSinceUpdate > 0) {
+            this.increaseDateBy(daysPassedSinceUpdate)
+            return
+        }
+
         this.calendarRound.dayNumber = preferences.currentDayNumber
         this.calendarRound.dayName = preferences.currentDay
 
         this.calendarRound.monthNumber = preferences.currentMonthNumber
         this.calendarRound.monthName = preferences.currentMonth
 
-        val daysPassedSinceUpdate : Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - preferences.daySaved
-        if (daysPassedSinceUpdate > 0) {
-            this.increaseDateBy(daysPassedSinceUpdate)
-            return
-        }
     }
 
     private fun increaseDateBy(daysPassedSinceUpdate: Int) {
+        // TODO: fix this.
         for (i in 0..(CalendarRoundModel::class.members).size) {
             calendarRound.indexToCalendar(i, daysPassedSinceUpdate, 1)
         }
@@ -97,6 +99,7 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
         val jdn : List<Int> = listOf<Int>(1721060, 1757585, 1794109, 1830633, 1867157, 1903682, 1940206, 1976730, 2013254,
             2049779, 2086303, 2122827, 2159351, 2195876, 2232400, 2268924, 2305448, 2341973, 2378497,
             2415021, 2451545)
+
         val daysInMonths : List<List<Int>> = listOf<List<Int>>(
             listOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31),
             listOf(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31))
@@ -115,7 +118,7 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
         daysAccumulated += this.day
         Log.i("currentDateToDays", "days passed since current year: $daysAccumulated")
 
-        for (i in jdn.indices) {
+        for (i in jdn.indices) { // 2014 - 2000 = 14
             if ((i + 1) * 100 > this.year) {
                 days = jdn[i]
                 yearMinus = i * 100
@@ -140,9 +143,11 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
 
         Log.i("currentDateToDays", "after GMT correlation: $days")
 
+        // TODO: save here to datastore
         this.workingTime = days
     }
 
+    // TODO: update DATASTORE
     fun runAllCalculations (doYearBearer: Boolean) {
         getWorkingTime()
         calculateLongCount()

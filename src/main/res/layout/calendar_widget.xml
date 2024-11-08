@@ -4,7 +4,7 @@
     android:id="@+id/Main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_dynamic_neutral10"
+    android:background="?android:attr/colorBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,25 +15,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/LongCountWidget"
+            android:id="@+id/CalendarRoundWidget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/CalendarMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/CalendarDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="20sp" />
+            android:text="@string/placeholder"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
