@@ -6,6 +6,7 @@ import com.example.mayacalendarapp.models.CalendarRoundModel
 import com.example.mayacalendarapp.models.LongCountModel
 import kotlinx.coroutines.*
 import java.util.Calendar
+import kotlin.concurrent.thread
 import kotlin.math.floor
 
 private const val GMT_CORRELATION : Int = 584283
@@ -23,6 +24,14 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
     ) {
         runBlocking {
             getCalendarValues(dataStoreProvider)
+            launch {
+                dataStoreProvider.updateDaySaved(currentDay)
+                dataStoreProvider.updateWorkingTime(workingTime)
+                dataStoreProvider.updateCurrentDay(calendarRound.dayName)
+                dataStoreProvider.updateCurrentDayNumber(calendarRound.dayNumber)
+                dataStoreProvider.updateCurrentMonth(calendarRound.monthName)
+                dataStoreProvider.updateCurrentMonthNumber(calendarRound.monthNumber)
+            }
         }
     }
 
@@ -33,8 +42,8 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
             this.runAllCalculations(true)
             return
         }
-
-        val daysPassedSinceUpdate : Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - preferences.daySaved
+        currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        val daysPassedSinceUpdate : Int = currentDay - preferences.daySaved
         if (daysPassedSinceUpdate > 0) {
             this.increaseDateBy(daysPassedSinceUpdate)
             return
@@ -45,7 +54,6 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
 
         this.calendarRound.monthNumber = preferences.currentMonthNumber
         this.calendarRound.monthName = preferences.currentMonth
-
     }
 
     private fun increaseDateBy(daysPassedSinceUpdate: Int) {
@@ -143,12 +151,10 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
 
         Log.i("currentDateToDays", "after GMT correlation: $days")
 
-        // TODO: save here to datastore
         this.workingTime = days
     }
 
-    // TODO: update DATASTORE
-    fun runAllCalculations (doYearBearer: Boolean) {
+    private fun runAllCalculations (doYearBearer: Boolean) {
         getWorkingTime()
         calculateLongCount()
         calculateCalendarRound(doYearBearer)
@@ -162,4 +168,5 @@ class Tzolkin(private val day : Int, private val month : Int, private val year :
     private val longCount = LongCountModel()
     private var workingTime = 0
     private var lordOfTheNight : Int = 0
+    private var currentDay : Int = 0
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
+import kotlin.reflect.jvm.internal.impl.types.model.TypeVariance
 
 
 data class CalendarData(
@@ -37,7 +38,7 @@ class CalendarDataRepository(
                 }
             }
     }
-    private object CalendarKeys {
+    object CalendarKeys {
         val CURRENT_MONTH = intPreferencesKey("month")
         val CURRENT_MONTH_NUMBER = intPreferencesKey("month_number")
         val CURRENT_DAY = intPreferencesKey("day")
@@ -96,6 +97,16 @@ class CalendarDataRepository(
     suspend fun updateCurrentDayNumber(currentDayNumber: Int) {
         dataStore.edit { preferences ->
             preferences[CalendarKeys.CURRENT_DAY_NUMBER] = currentDayNumber
+        }
+    }
+    suspend fun updateWorkingTime(workingTime: Int) {
+        dataStore.edit { preferences ->
+            preferences[CalendarKeys.CURRENT_WORKING_TIME] = workingTime
+        }
+    }
+    suspend fun updateDaySaved(day : Int) {
+        dataStore.edit { preferences ->
+            preferences[CalendarKeys.DAY_SAVED] = day
         }
     }
 }
